@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>06_css商品交互效果3</title>
+  <style>
+    body {
+      font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+      -webkit-font-smoothing: antialiased;
+      word-wrap: break-word;
+    }
+    *, :after, :before {
+      box-sizing: border-box;
+    }
+    *::selection {
+      color: #fff;
+      background: #fe7300;
+    }
+    div {
+      display: block;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: row;
+      box-sizing: border-box;
+      position: relative;
+      gap: 1.25rem;
+      width: 1200px;
+      height: 400px;
+      margin: 8rem auto;
+      overflow: hidden;
+    }
+    .item {
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+      background-image: linear-gradient(135deg,#42adff,#385ff7);
+      border-radius: 8px;
+      width: 400px;
+      display: flex;
+      margin: 0;
+      padding: 40px;
+      transition: width .3s ease;
+    }
+    .item.active {
+      width: 800px;
+    }
+    .active .box-content-1 {
+      left: 0;
+      opacity: 1;
+    }
+    .active .box-content-2 {
+      left: -110px;
+      opacity: 0;
+    }
+
+    /*背景及动画*/
+    .bg-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      width: 800px;
+      height: 400px;
+      pointer-events: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      opacity: .8;
+    }
+    .bg-animation .bg-animation-inner {
+      width: 100%;
+      height: 100%;
+      background-image: url('img/img1.png');
+      background-size: cover;
+    }
+    .bg-animation .bg-animation-inner .bg-animation-circle {
+      width: 100%;
+      height: 100%;
+      -webkit-mask-image: url('img/img2.png');
+      mask-image: url('img/img2.png');
+      -webkit-mask-size: cover;
+      mask-size: cover;
+      position: relative;
+    }
+    .bg-animation .bg-animation-inner .bg-animation-circle .bg-animation-circle-inner{
+      position: absolute;
+      left: 50%;
+      top: 30%;
+      transform: translate(-50%,-50%);
+      width: 1288px;
+      height: 994px;
+    }
+    .bg-animation .bg-animation-inner .bg-animation-circle .bg-animation-circle-inner img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: scale(0);
+      animation: index_bgNetAutomationCircle__Bi0it 5s cubic-bezier(.6,.6,0,1) infinite;
+    }
+    @keyframes index_bgNetAutomationCircle__Bi0it {
+      0% {
+        transform: scale(0);
+      }
+      100% {
+        transform: scale(6);
+      }
+    }
+
+    .box-label span {
+      display: inline-block;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 12px;
+      padding: 2px 11px;
+      font-size: 12px;
+      line-height: 17px;
+    }
+
+    /*中部内容*/
+    .box-content-1 {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      z-index: 1;
+      transition: all .3s ease;
+    }
+    .box-content-2 {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      left: 0;
+      opacity: 1;
+      transition: all .3s ease;
+    }
+    h4 {
+      color: rgba(0,0,0,.85);
+      font-weight: 500;
+    }
+    .box-content-1 h4 {
+      margin-top: 45px;
+      margin-bottom: 32px;
+      font-size: 36px;
+    }
+    .box-content-2 h4 {
+      margin: 39px 0 0;
+      font-size: 28px;
+    }
+    h4 span {
+      font-family: Alimama ShuHeiTi,-apple-system,BlinkMacSystemFont;
+      font-weight: 700;
+      background-image: linear-gradient(to right,var(--tw-gradient-stops));
+      --tw-gradient-from: #fff;
+      --tw-gradient-to: hsla(0,0%,100%,0);
+      --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to);
+      --tw-gradient-to: #b8ffed;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .box-content-1 .box-content-list {
+      display: flex;
+      flex-direction: row;
+    }
+    .box-content-1 .box-content-list ul {
+      margin: 0 0 1rem;
+      padding: 0;
+      list-style-type: none;
+      --tw-text-opacity: 1;
+      color: rgb(255 255 255/var(--tw-text-opacity));
+    }
+    .box-content-1 .box-content-list ul:first-child {
+      margin-right: 67px;
+    }
+    .box-content-1 .box-content-list ul li {
+      position: relative;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      padding-left: 1.5rem;
+      margin-bottom: 16px;
+      display: list-item;
+      text-align: -webkit-match-parent;
+    }
+    .box-content-1 .box-content-list ul li svg {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 0;
+      display: block;
+      width: 16px;
+      height: 16px;
+      /*background-image: url('https://e-assets.gitee.com/gitee-community-web/_next/static/media/icon-check.9cf56828.svg');*/
+    }
+    .box-content-1 .box-content-footer {
+      flex-direction: row;
+      align-items: center;
+      margin-top: auto;
+      display: flex;
+      position: relative;
+    }
+    .box-content-1 .box-content-footer a {
+      display: inline-block !important;
+      margin-right: 1rem !important;
+      cursor: pointer;
+      color: #fff;
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .box-content-1 .box-content-footer a:hover {
+      opacity: 0.8;
+    }
+    .box-content-1 .box-content-footer .a-1 {
+      border-color: transparent;
+      background-color: #fff;
+      color: #1068bf;
+      padding: 0 15px;
+      border-radius: 0.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 2.5rem;
+      height: 2.5rem;
+    }
+    .box-content-1 .box-content-footer .a-2 {
+      border: #fff 1px solid;
+      background-color: transparent;
+      color: #fff;
+      padding: 0 15px;
+      border-radius: 0.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 2.5rem;
+      height: 2.5rem;
+    }
+    .box-content-1 .box-content-footer .a-3 {
+      font-size: 1rem;
+      line-height: 1rem;
+    }
+    .box-content-1 .box-content-footer .a-3 svg {
+      content: "";
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      vertical-align: -0.14em;
+      margin-left: 4px;
+    }
+    .box-content-1 .box-content-footer .tooltip-open {
+      opacity: 0;
+      position: absolute;
+      top: 52px;
+      left: -0.8rem;
+      z-index: 9999;
+      transform: scale(0);
+      padding: 0.3rem 0.5rem;
+      border-radius: 3px;
+      font-size: 12px;
+      color: #333;
+      background-color: #fff;
+      transition: all .3s ease;
+    }
+    .box-content-1 .box-content-footer .tooltip-open:nth-child(4) {
+      left: 8.6rem;
+    }
+    .box-content-1 .box-content-footer .tooltip-open .tooltip-arrow {
+      position: absolute;
+      left: calc(50% - 5px);
+      top: -14px;
+      width: 10px;
+      height: 10px;
+      border: 8px solid transparent;
+      border-bottom: 10px solid #fff;
+      background-color: transparent;
+      border-radius: 2px;
+      transform: rotateX(45deg);
+    }
+    .box-content-1 .box-content-footer .a-1:hover+.tooltip-open, .box-content-1 .box-content-footer .a-2:hover+.tooltip-open {
+      opacity: 1;
+      z-index: 9999;
+      transition: opacity .3s ease;
+      transform: scale(1);
+    }
+    .box-content-2 .box-content-footer {
+      margin-top: auto;
+      font-size: 28px;
+      line-height: 1.43;
+      white-space: pre-line;
+      font-weight: 600;
+      --tw-text-opacity: 1;
+      color: rgb(255 255 255/var(--tw-text-opacity));
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!--左盒子-->
+    <div class="item active">
+      <div class="bg-animation">
+        <div class="bg-animation-inner">
+          <div class="bg-animation-circle">
+            <div class="bg-animation-circle-inner"><img src="./img/img3.png" alt="" width="1" height="1"> </div>
+          </div>
+        </div>
+      </div>
+      <div class="box-label">
+        <span>开箱即用</span>
+      </div>
+      <div class="box-content-1"><h4><span>企业版/专业版</span></h4>
+        <div class="box-content-list">
+          <ul>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="none" fill-rule="evenodd"><path d="M0 0h16v16H0z"/><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" fill="#1CDEFF" fill-rule="nonzero"/><path d="M11.672 5.215 6.939 9.947 4.535 7.544a.6.6 0 0 0-.848.848l2.828 2.828a.6.6 0 0 0 .849 0l5.156-5.156a.6.6 0 1 0-.848-.849z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg>
+              同类产品价格优势
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="none" fill-rule="evenodd"><path d="M0 0h16v16H0z"/><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" fill="#1CDEFF" fill-rule="nonzero"/><path d="M11.672 5.215 6.939 9.947 4.535 7.544a.6.6 0 0 0-.848.848l2.828 2.828a.6.6 0 0 0 .849 0l5.156-5.156a.6.6 0 1 0-.848-.849z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg>
+              满足轻量级 DevOps 流程使用</li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="none" fill-rule="evenodd"><path d="M0 0h16v16H0z"/><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" fill="#1CDEFF" fill-rule="nonzero"/><path d="M11.672 5.215 6.939 9.947 4.535 7.544a.6.6 0 0 0-.848.848l2.828 2.828a.6.6 0 0 0 .849 0l5.156-5.156a.6.6 0 1 0-.848-.849z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg>
+              支持混合云部署模式，满足多样性需求</li>
+          </ul>
+        </div>
+        <div class="box-content-footer">
+          <a href="https://gitee.com/enterprises/new" class="a-1" rel="noopener" target="_blank">企业版免费注册</a>
+          <div class="tooltip-open">Gitee 公有云版本可在线试用<div class="tooltip-arrow"></div></div>
+          <a href="https://gitee.com/#professional-presence-submit" class="a-2">专业版预约演示</a>
+          <div class="tooltip-open">专业版为企业版私有化部署版本<div class="tooltip-arrow"></div></div>
+          <a href="https://gitee.com/enterprises" class="a-3" rel="noreferrer" target="_blank">了解更多<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M0 0h14v14H0z"/><path d="m5.323 1.03 5.89 5.597a.51.51 0 0 1 0 .746l-5.89 5.597a.576.576 0 0 1-.785 0l-.065-.073a.508.508 0 0 1 .065-.673L10.035 7 4.538 1.776a.51.51 0 0 1 0-.746.576.576 0 0 1 .785 0z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg></a>
+        </div>
+      </div>
+      <div class="box-content-2"><h4><span>企业版/专业版</span></h4>
+        <div class="box-content-footer">
+          <span>轻量级</span>
+          <span>DevOps</span>
+          <span>一站式平台</span>
+        </div>
+      </div>
+    </div>
+    <!--右盒子-->
+    <div class="item">
+      <div class="bg-animation">
+        <div class="bg-animation-inner">
+          <div class="bg-animation-circle">
+            <div class="bg-animation-circle-inner"><img src="./img/img3.png" alt="" width="1" height="1"> </div>
+          </div>
+        </div>
+      </div>
+      <div class="box-label">
+        <span>深度定制</span>
+      </div>
+      <div class="box-content-1"><h4><span>旗舰版</span></h4>
+        <div class="box-content-list">
+          <ul>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="none" fill-rule="evenodd"><path d="M0 0h16v16H0z"/><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" fill="#1CDEFF" fill-rule="nonzero"/><path d="M11.672 5.215 6.939 9.947 4.535 7.544a.6.6 0 0 0-.848.848l2.828 2.828a.6.6 0 0 0 .849 0l5.156-5.156a.6.6 0 1 0-.848-.849z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg>
+              信息安全满足国家信创要求
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="none" fill-rule="evenodd"><path d="M0 0h16v16H0z"/><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" fill="#1CDEFF" fill-rule="nonzero"/><path d="M11.672 5.215 6.939 9.947 4.535 7.544a.6.6 0 0 0-.848.848l2.828 2.828a.6.6 0 0 0 .849 0l5.156-5.156a.6.6 0 1 0-.848-.849z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg>
+              为千人以上大型研发团队深度定制
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="none" fill-rule="evenodd"><path d="M0 0h16v16H0z"/><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" fill="#1CDEFF" fill-rule="nonzero"/><path d="M11.672 5.215 6.939 9.947 4.535 7.544a.6.6 0 0 0-.848.848l2.828 2.828a.6.6 0 0 0 .849 0l5.156-5.156a.6.6 0 1 0-.848-.849z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg>
+              私有化部署，满足自主可控的数据安全需求
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="none" fill-rule="evenodd"><path d="M0 0h16v16H0z"/><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" fill="#1CDEFF" fill-rule="nonzero"/><path d="M11.672 5.215 6.939 9.947 4.535 7.544a.6.6 0 0 0-.848.848l2.828 2.828a.6.6 0 0 0 .849 0l5.156-5.156a.6.6 0 1 0-.848-.849z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg>
+              专业化的本地技术支持团队服务
+            </li>
+          </ul>
+        </div>
+        <div class="box-content-footer">
+          <a href="https://gitee.cn/contact-us" class="a-1" rel="noreferrer" target="_blank">预约演示</a>
+          <a href="https://gitee.cn/ultimate" class="a-3" rel="noreferrer" target="_blank">了解更多<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd"><path d="M0 0h14v14H0z"/><path d="m5.323 1.03 5.89 5.597a.51.51 0 0 1 0 .746l-5.89 5.597a.576.576 0 0 1-.785 0l-.065-.073a.508.508 0 0 1 .065-.673L10.035 7 4.538 1.776a.51.51 0 0 1 0-.746.576.576 0 0 1 .785 0z" fill="#FFF" fill-rule="nonzero"/></g><script xmlns=""/></svg></a>
+        </div>
+      </div>
+      <div class="box-content-2"><h4><span>旗舰版</span></h4>
+        <div class="box-content-footer">
+          <span>专业级</span>
+          <span>DevOps</span>
+          <span>一站式平台</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    /*$(document).ready(function () {
+      $('.item').hover(function () {
+        // Remove 'active' class from all item elements
+        $('.item').removeClass('active');
+
+        // Add 'active' class to the hover item element
+        $(this).addClass('active');
+      });
+    });*/
+
+    document.addEventListener('DOMContentLoaded', function () {
+      let liElements = document.querySelectorAll('.item');
+      liElements.forEach(function (liElement) {
+        liElement.addEventListener('mouseenter', function () {
+          // Remove 'active' class from all item elements
+          liElements.forEach(function (li) {
+            li.classList.remove('active');
+          });
+
+          // Add 'active' class to the mouseenter item element
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
